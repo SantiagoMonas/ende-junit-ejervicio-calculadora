@@ -20,3 +20,42 @@ El alumno deberá hacer un fork de este proyecto e implementar la solución soli
 
 
 **Si no se puede acceder al repositorio la evaluación del ejercicio será de 0. No se evaluarán entregas modificadas/entregadas fuera del plazo establecido en la tarea**
+
+## Santiago Monasterio 1DAW
+
+### 1. ¿Qué sentido puede tener este proyecto y para que lo podrías usar?
+
+- El proyecto es un entorno diseñado para aprender y practicar pruebas unitarias usando la libreria JUnit. Lo podemos ver ya que si miramos el codigo no tenemos un main, Scanner ni un print, no es interactivo. Pues creo que se podria usar para la logica matematica de alguna aplicacion por ejemplo.
+
+### 2. Revisa las pruebas de la suma y comenta lo que te parezca de interés
+
+- Despues de hacer el test podemos ver que los metodos dividir, sumar y sumar positivos no dan error, pero sumarpositivosmal nos da un error poniendo "Expected [4] but was [5]. Segun he leido esto es el corazon de JUnit, avisarme cuando el codigo no hace lo que esperaba.
+  
+### 3. Realiza un estudio de caja negra de la división e implementa las pruebas en junit: Se realizará en markdown.
+
+Para probar el método de la división, hemos analizado las clases de equivalencia (combinaciones de números positivos, negativos y el cero) y los valores límite (como la división por cero).
+
+| Caso de Prueba | Entrada (a, b)  | Resultado Esperado         | Descripción                         |
+| :------------- | :-------------- | :------------------------- | :---------------------------------- |
+| **1**          | a = 10, b = 2   | 5                          | Positivo entre positivo             |
+| **2**          | a = -10, b = -2 | 5                          | Negativo entre negativo             |
+| **3**          | a = 10, b = -2  | -5                         | Positivo entre negativo             |
+| **4**          | a = -10, b = 2  | -5                         | Negativo entre positivo             |
+| **5**          | a = 0, b = 5    | 0                          | Cero entre cualquier número da cero |
+| **6**          | a = 10, b = 0   | OperacionNoValidaException | División por cero (Valor Límite)    |
+
+
+### Codigo
+- Esto es el codigo que he implementado en la parte de calculadoratest.java (en los dos lados por si acaso)
+
+// parte del ejercicio.
+    @Test
+    @DisplayName("Probar divisiones válidas")
+    void dividir() {
+        assertAll("División",
+                () -> assertEquals(5, Calculadora.dividir(10, 2), "10 / 2 = 5"),
+                () -> assertEquals(5, Calculadora.dividir(-10, -2), "-10 / -2 = 5"),
+                () -> assertEquals(-5, Calculadora.dividir(10, -2), "10 / -2 = -5"),
+                () -> assertEquals(-5, Calculadora.dividir(-10, 2), "-10 / 2 = -5"),
+                () -> assertEquals(0, Calculadora.dividir(0, 5), "0 / 5 = 0"));
+    }
