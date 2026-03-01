@@ -18,14 +18,11 @@ El alumno deberá hacer un fork de este proyecto e implementar la solución soli
 
 >Se deberá utilizar este fichero, y los artefactos de código del proyecto, para resolver el ejercicio.
 
-
-**Si no se puede acceder al repositorio la evaluación del ejercicio será de 0. No se evaluarán entregas modificadas/entregadas fuera del plazo establecido en la tarea**
-
 ## Santiago Monasterio 1DAW
 
 ### 1. ¿Qué sentido puede tener este proyecto y para que lo podrías usar?
 
-- El proyecto es un entorno diseñado para aprender y practicar pruebas unitarias usando la libreria JUnit. Lo podemos ver ya que si miramos el codigo no tenemos un main, Scanner ni un print, no es interactivo. Pues creo que se podria usar para la logica matematica de alguna aplicacion por ejemplo.
+- El proyecto es un entorno diseñado para aprender y practicar pruebas unitarias usando la libreria JUnit. Lo podemos ver ya que si miramos el codigo no tenemos un main, Scanner ni un print, no es interactivo. Pues creo que se podria usar para la logica matematica de alguna aplicacion.
 
 ### 2. Revisa las pruebas de la suma y comenta lo que te parezca de interés
 
@@ -43,12 +40,13 @@ Para probar el método de la división, hemos analizado las clases de equivalenc
 | **4**          | a = -10, b = 2  | -5                         | Negativo entre positivo             |
 | **5**          | a = 0, b = 5    | 0                          | Cero entre cualquier número da cero |
 | **6**          | a = 10, b = 0   | OperacionNoValidaException | División por cero (Valor Límite)    |
+| **7**          | a = 1, b = 2    | 0                          | División con truncamiento decimal   |
 
 
 ### Codigo
-- Esto es el codigo que he implementado en la parte de calculadoratest.java (en los dos lados por si acaso)
+- Esto es el codigo que se deberia poner en la parte de calculadoratest.java
 
-// parte del ejercicio.
+// Pruebas.
     @Test
     @DisplayName("Probar divisiones válidas")
     void dividir() {
@@ -57,5 +55,14 @@ Para probar el método de la división, hemos analizado las clases de equivalenc
                 () -> assertEquals(5, Calculadora.dividir(-10, -2), "-10 / -2 = 5"),
                 () -> assertEquals(-5, Calculadora.dividir(10, -2), "10 / -2 = -5"),
                 () -> assertEquals(-5, Calculadora.dividir(-10, 2), "-10 / 2 = -5"),
-                () -> assertEquals(0, Calculadora.dividir(0, 5), "0 / 5 = 0"));
+                () -> assertEquals(0, Calculadora.dividir(0, 5), "0 / 5 = 0"),
+                () -> assertEquals(0, Calculadora.dividir(1, 2), "1 / 2 = 0 (truncamiento)"));
+    }
+
+    @Test
+    @DisplayName("Probar división por cero (Excepción)")
+    void dividirPorCero() {
+        assertThrows(OperacionNoValidaException.class, () -> {
+            Calculadora.dividir(10, 0);
+        },);
     }
