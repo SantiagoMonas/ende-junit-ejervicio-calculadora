@@ -30,39 +30,46 @@ El alumno deberá hacer un fork de este proyecto e implementar la solución soli
   
 ### 3. Realiza un estudio de caja negra de la división e implementa las pruebas en junit: Se realizará en markdown.
 
-Para probar el método de la división, hemos analizado las clases de equivalencia (combinaciones de números positivos, negativos y el cero) y los valores límite (como la división por cero).
+Para probar el método de la división primero hacemos el estudio de cada entrada individualmente.
+Para la variable a sus limites son (-∞, ∞).
 
-| Caso de Prueba | Entrada (a, b)  | Resultado Esperado         | Descripción                         |
-| :------------- | :-------------- | :------------------------- | :---------------------------------- |
-| **1**          | a = 10, b = 2   | 5                          | Positivo entre positivo             |
-| **2**          | a = -10, b = -2 | 5                          | Negativo entre negativo             |
-| **3**          | a = 10, b = -2  | -5                         | Positivo entre negativo             |
-| **4**          | a = -10, b = 2  | -5                         | Negativo entre positivo             |
-| **5**          | a = 0, b = 5    | 0                          | Cero entre cualquier número da cero |
-| **6**          | a = 10, b = 0   | OperacionNoValidaException | División por cero (Valor Límite)    |
-| **7**          | a = 1, b = 2    | 0                          | División con truncamiento decimal   |
+| Variable | Valores | Tipo de Caso | Valor de Prueba Seleccionado |
+| :------- | :------ | :----------- | :--------------------------- |
+| **a**    | (-∞, ∞) | Válido       | 7                            |
+| **b**    | (-∞, 0) | Válido       | -7                           |
+| **b**    | (0, ∞)  | Válido       | 10                           |
+| **b**    | 0       | No válido    | 0 (Provoca error)            |
 
 
-### Codigo
+| Caso de Prueba | Entrada (a, b) | Resultado Esperado | Descripción |
+| :------------- | :------------- | :----------------- | :---------- |
+| **1**          | a = 7, b = -7  | -1                 |
+| **2**          | a = 7, b = 10  | 0                  |
+| **3**          | a = 7, b = 0   | Error              |
+
+### Codigo en JUnit
 - Esto es el codigo que se deberia poner en la parte de calculadoratest.java
 
-// Pruebas.
+```java
     @Test
-    @DisplayName("Probar divisiones válidas")
-    void dividir() {
-        assertAll("División",
-                () -> assertEquals(5, Calculadora.dividir(10, 2), "10 / 2 = 5"),
-                () -> assertEquals(5, Calculadora.dividir(-10, -2), "-10 / -2 = 5"),
-                () -> assertEquals(-5, Calculadora.dividir(10, -2), "10 / -2 = -5"),
-                () -> assertEquals(-5, Calculadora.dividir(-10, 2), "-10 / 2 = -5"),
-                () -> assertEquals(0, Calculadora.dividir(0, 5), "0 / 5 = 0"),
-                () -> assertEquals(0, Calculadora.dividir(1, 2), "1 / 2 = 0 (truncamiento)"));
+    public void testDivisionNumeroNegativo() {
+        // Caso de Prueba 1: a = 7, b = -7 | Esperado: -1
+        int resultado = calc.dividir(7, -7);
+        assertEquals(-1, resultado, "La división de 7 entre -7 debería ser -1");
     }
 
     @Test
-    @DisplayName("Probar división por cero (Excepción)")
-    void dividirPorCero() {
-        assertThrows(OperacionNoValidaException.class, () -> {
-            Calculadora.dividir(10, 0);
-        },);
+    public void testDivisionDivisorMayor() {
+        // Caso de Prueba 2: a = 7, b = 10 | Esperado: 0
+        int resultado = calc.dividir(7, 10);
+        assertEquals(0, resultado, "La división entera de 7 entre 10 debería ser 0");
     }
+
+    @Test
+    public void testDivisionPorCero() {
+        // Caso de Prueba 3: a = 7, b = 0 | Esperado: Error (Exception)
+        assertThrows(ArithmeticException.class, () -> {
+            calc.dividir(7, 0);
+        }, "Intentar dividir entre 0 debería lanzar ArithmeticException");
+    }
+    ```
